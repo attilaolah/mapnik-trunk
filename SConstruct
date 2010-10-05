@@ -859,6 +859,7 @@ if not preconfigured:
             if libinfo[2]:
                 color_print(1,'Could not find required header or shared library for %s' % libinfo[0])
                 env['MISSING_DEPS'].append(libinfo[0])
+                import ipdb; ipdb.set_trace();
             else:
                 color_print(4,'Could not find optional header or shared library for %s' % libinfo[0])
                 env['SKIPPED_DEPS'].append(libinfo[0])            
