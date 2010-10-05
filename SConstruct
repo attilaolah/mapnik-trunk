@@ -575,7 +575,7 @@ def FindBoost(context, prefixes, thread_flag):
             BOOST_VERSION = re.search('\d.\d\d', BOOST_INCLUDE_DIR)
             BOOST_VERSION = BOOST_VERSION.group() if BOOST_VERSION else ''
             newestLibItems = [item for item in libItems if BOOST_VERSION in item]
-            lib_name = max(newestLibItems or [None]) or max(libItems or [None])
+            lib_name = min(newestLibItems or [None]) or min(libItems or [None])
             match = re.search(r'%s(.*)\..*' % search_lib, lib_name)
             if hasattr(match,'groups'):
                 BOOST_APPEND = match.groups()[0]
