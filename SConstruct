@@ -579,7 +579,6 @@ def FindBoost(context, prefixes, thread_flag):
             match = re.search(r'%s(.*)\..*' % search_lib, lib_name)
             if hasattr(match,'groups'):
                 BOOST_APPEND = match.groups()[0]
-            import ipdb; ipdb.set_trace();
             break
     
     msg = str()
