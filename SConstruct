@@ -80,13 +80,6 @@ def create_uninstall_target(env, path, is_glob=False):
                 ])
                 env.Alias("uninstall", "uninstall-"+path)
     
-def shortest_name(libs):
-    name = '-'*200
-    for lib in libs:
-        if len(name) > len(lib):
-            name = lib
-    return name
-
 DEFAULT_LINK_PRIORITY = ['internal','other','frameworks','user','system']
 
 def sort_paths(items,priority):
@@ -578,11 +571,15 @@ def FindBoost(context, prefixes, thread_flag):
         incItems = glob(os.path.join(searchDir, 'include/boost*/'))
         if len(libItems) >= 1 and len(incItems) >= 1:
             BOOST_LIB_DIR = os.path.dirname(libItems[0])
-            BOOST_INCLUDE_DIR = incItems[0].rstrip('boost/')
-            shortest_lib_name = shortest_name(libItems)
-            match = re.search(r'%s(.*)\..*' % search_lib, shortest_lib_name)
+            BOOST_INCLUDE_DIR = sorted(incItems)[-1].rstrip('boost/')
+            BOOST_VERSION = re.search('\d.\d\d', BOOST_INCLUDE_DIR)
+            BOOST_VERSION = BOOST_VERSION.group() if BOOST_VERSION else ''
+            newestLibItems = [item for item in libItems if BOOST_VERSION in item]
+            lib_name = max(newestLibItems or [None]) or max(libItems or [None])
+            match = re.search(r'%s(.*)\..*' % search_lib, lib_name)
             if hasattr(match,'groups'):
                 BOOST_APPEND = match.groups()[0]
+            import ipdb; ipdb.set_trace();
             break
     
     msg = str()
